@@ -11,6 +11,9 @@ export default class AddAnime extends Component {
       title: anime.title,
       image: anime.image,
       description: anime.description,
+      watching: true,
+      completed:false,
+      planning: false
     }
     
     
@@ -23,6 +26,9 @@ export default class AddAnime extends Component {
           title: response.data.title,
           image: response.data.image,
           description: response.data.description,
+          watching: response.data.watching,
+          completed: response.data.completed,
+          planning: response.data.planning,
         })   
       })
       .catch(function (error) {
@@ -48,6 +54,28 @@ export default class AddAnime extends Component {
     })
   }
 
+  onChangeProgress(e){
+    let progress = e.target.value;
+    switch (progress) {
+      case "completed":
+        this.setState({
+          watching: false,
+          completed: true,
+          planning: false
+        })
+        break;
+      case "planning":
+        this.setState({
+          watching: false,
+          completed: false,
+          planning: true
+        })
+        break;
+      default:
+        break;
+    }
+  }
+
   onSubmit(e){
     e.preventDefault();
 
@@ -55,6 +83,9 @@ export default class AddAnime extends Component {
       title: this.state.title,
       image: this.state.image,
       description: this.state.description,
+      watching:this.state.watching,
+      completed:this.state.completed,
+      planning:this.state.planning,
     }
 
     console.log(anime);
@@ -91,11 +122,16 @@ export default class AddAnime extends Component {
               <label htmlFor="description">Description:</label>
               <textarea value={this.description} placeholder="Insert description" onChange={(e) => this.onChangeDescription(e)} ></textarea>
             </div>
+            <div className="progress info">
+              <label htmlFor="progress">Progress:</label>
+              <select name="progress" id="progress-select" onChange={(e) => this.onChangeProgress(e)}>
+                <option value="watching">watching</option>
+                <option value="completed">completed</option>
+                <option value="planning">plan to watch</option>
+              </select>
+            </div>
             <button className="view" 
             value="Edit Anime"
-            //  onClick={() => {
-            //   console.log(this.state.anime);
-            // }}
             >Submit</button>
           </form>
         </div>
@@ -103,44 +139,3 @@ export default class AddAnime extends Component {
     )
   }
 }
-
-
-
-// import React, {useState, useContext, useEffect} from 'react'
-// import {GlobalContext} from '../context/GlobalState';
-
-// export default function AddAnime(props) {
-//   const anime = props.location.state.anime
-
-//   const { animes, editAnime } = useContext(GlobalContext);
-
-//   useEffect(() => {
-//     editAnime(anime.id);
-//     console.log(animes);
-//   }, [])
-  
-//   const [title, setTitle] = useState('');
-//   const [image, setImage] = useState('');
-//   const [description, setDescription] = useState('');
-  
-//   const onSubmit = e => {
-//     // const {title, image, description} = anime
-//     e.preventDefault();
-    
-//     const newAnime = {
-//       id: Math.floor(Math.random() * 100000),
-//       title,
-//       image,
-//       description
-//     }
-//     // console.log(newAnime);
-    
-//     // editAnime(newAnime);
-//     setTitle('')
-//     setImage('')
-//     setDescription('')
-//   }
-
-  
-  
-// }

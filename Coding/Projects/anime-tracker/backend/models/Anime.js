@@ -13,6 +13,15 @@ const AnimeSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true
+  },
+  watching:{
+    type:Boolean
+  },
+  completed: {
+    type:Boolean
+  },
+  planning: {
+    type: Boolean
   }
 });
 

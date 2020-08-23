@@ -33,7 +33,7 @@ exports.getAnime = async (req, res, next) => {
 // @access Public
 exports.addAnime = async (req, res, next) => {
   try {
-    const { title, image, description} = req.body;
+    const { title, image, description, watching, completed,planning} = req.body;
 
     const anime = await Anime.create(req.body);
 
@@ -64,10 +64,14 @@ exports.editAnime = async (req, res, next) => {
   try {
     let anime = await Anime.findByIdAndUpdate(req.params.id);
     
-    const {title, image, description} = req.body;
+    const { title, image, description, watching, completed,planning} = req.body;
+
     anime.title = title;
     anime.image = image;
     anime.description = description;
+    anime.watching = watching;
+    anime.completed = completed;
+    anime.planning = planning;
 
     console.log(anime);
 

@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-// import {Link} from 'react-router-dom'
 import axios from 'axios'
-import Anime from './Anime'
 import Navbar from '../components/Navbar'
 import List from './List'
 
@@ -11,11 +9,14 @@ export default class AnimeList extends Component {
   constructor(props){
     super(props);
 
+    // set default state
     this.state = {
-      anime: []
+      anime: [],
+      progress: 'watching'
     }
   }
 
+  // Load data and set the state
   componentDidMount() {
     axios.get('http://localhost:5000/anime/')
       .then(response => {
@@ -26,52 +27,67 @@ export default class AnimeList extends Component {
       })
   }
 
-  // const animeList = state.anime.map(currentAnime => {
-  //   return currentAnime
-  // })
-  animeList = () => {
-    return this.state.anime.map(currentAnime => {
-      return <Anime anime={currentAnime} key={currentAnime._id}
-      />
-    })
-  }
-
-  animeFilter = () => {
-    return this.state.anime
-    .filter(item => {
-      if(item.title.includes('o')){
-        return item
-      }
+  // click event changing the state, prop to component
+  handleClick = (e)=>{
+    let target = e.target.innerHTML.toLowerCase()
+    switch (target) {
+      case "watching":
+        this.setState({
+          progress: 'watching'
+        })
+        break;
+      case "completed":
+        this.setState({
+          progress: 'completed'
+        })
+        break;
+      case "plan to watch":
+        this.setState({
+          progress: 'planning'
+        })
+        break;
+      default:
+        return
     }
-    )
-    .map(currentAnime => {
-      return <Anime anime={currentAnime} key={currentAnime._id}
-      />
-    })
   }
 
-  loggedComp = () => {
-   console.log('logged')
-  }
-  
+
+
   render() {
+    // declare array to use
+    const watchList = this.state.anime.filter(item => {
+      return item.watching
+    })
+    const planList = this.state.anime.filter(item => {
+      return item.planning
+    })
+    const compList = this.state.anime.filter(item => {
+      return item.completed
+    })
+    
+    let myList;
+
+    // the state to change what is being rendered
+    const progress = this.state.progress;
+    switch (progress) {
+      case "watching":
+        myList = <List anime={watchList} />
+        break;
+      case "planning":
+        myList = <List anime={planList} />
+        break;
+      case "completed":
+        myList = <List anime={compList} />
+        break;
+        default:
+          return
+    }
+
+    
     return (
       <>
-      <div className="navbar">
-          <div className="completed" onClick={
-            this.loggedComp
-            }>
-            <h3>Completed</h3>
-          </div>
-          <div className="watching active">
-            <h3>Watching</h3>
-          </div>
-          <div className="Planning">
-            <h3>Plan to Watch</h3>
-          </div>
-        </div>
-        {this.loggedComp()}
-        <List animeFilter={this.animeList} />
+        <Navbar handleClick={this.handleClick} />
+        {myList}
       </>
     )
   }

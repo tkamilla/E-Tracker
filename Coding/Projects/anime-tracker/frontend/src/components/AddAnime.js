@@ -9,6 +9,9 @@ export default class AddAnime extends Component {
       title: '',
       image: '',
       description: '',
+      watching: true,
+      completed: false,
+      planning: false
     }
 
   }
@@ -29,6 +32,28 @@ export default class AddAnime extends Component {
     })
   }
 
+  onChangeProgress(e){
+    let progress = e.target.value;
+    switch (progress) {
+      case "completed":
+        this.setState({
+          watching: false,
+          completed: true,
+          planning: false
+        })
+        break;
+      case "planning":
+        this.setState({
+          watching: false,
+          completed: false,
+          planning: true
+        })
+        break;
+      default:
+        break;
+    }
+  }
+
   onSubmit(e){
     e.preventDefault();
 
@@ -36,9 +61,12 @@ export default class AddAnime extends Component {
       title: this.state.title,
       image: this.state.image,
       description: this.state.description,
+      watching:this.state.watching,
+      completed:this.state.completed,
+      planning:this.state.planning,
     }
 
-    console.log(anime);
+    // console.log(anime);
 
     axios.post('http://localhost:5000/anime/add', anime)
       .then(res => console.log(res.data))
@@ -67,6 +95,14 @@ export default class AddAnime extends Component {
             <div className="description info">
               <label htmlFor="description">Description:</label>
               <textarea value={this.description} placeholder="Insert description" onChange={(e) => this.onChangeDescription(e)} ></textarea>
+            </div>
+            <div className="progress info">
+              <label htmlFor="progress">Progress:</label>
+              <select name="progress" id="progress-select" onChange={(e) => this.onChangeProgress(e)}>
+                <option value="watching">watching</option>
+                <option value="completed">completed</option>
+                <option value="planning">plan to watch</option>
+              </select>
             </div>
             <button className="view">Add Anime</button>
           </form>

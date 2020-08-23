@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import Header from './components/Header'
-import Navbar from './components/Navbar'
 import AnimeList from './components/AnimeList'
 import EditAnime from './components/EditAnime'
 import SingleAnime from './components/SingleAnime'

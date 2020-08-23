@@ -1,27 +1,18 @@
 import React, { Component } from 'react'
 
 export default class Navbar extends Component {
-  constructor(props){
-    super(props)
-
-    console.log(props.loggedComp);
-  }
-
-  // componentDidMount(){
-  //   console.log(props);
-  // }
   
   render() {
     return (
       <>
         <div className="navbar">
-          <div className="completed" onClick={this.props.animeFilter}>
+          <div className="completed" onClick={this.props.handleClick} >
             <h3>Completed</h3>
           </div>
-          <div className="watching active">
+          <div className="watching active" onClick={this.props.handleClick} >
             <h3>Watching</h3>
           </div>
-          <div className="Planning">
+          <div className="Planning" onClick={this.props.handleClick} >
             <h3>Plan to Watch</h3>
           </div>
         </div>
